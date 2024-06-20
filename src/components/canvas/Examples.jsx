@@ -59,6 +59,10 @@ export function Tape(props) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/TAPE.glb')
   const { actions } = useAnimations(animations, group)
+
+  // const scalingFactor = Math.min(Math.max(props.responsive / 1300, 0.5), 1.2)
+  // console.log(scalingFactor)
+
   // useEffect(() => {
   //   if (actions) {
   //     actions['your_animation_name'].play(); // Replace 'your_animation_name' with the actual name of your animation
@@ -77,7 +81,12 @@ export function Tape(props) {
     }
   }, [actions])
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group
+      ref={group}
+      {...props}
+      dispose={null}
+      //  scale={scalingFactor}
+    >
       <group name='Scene'>
         <group name='TCD5_body'>
           <mesh

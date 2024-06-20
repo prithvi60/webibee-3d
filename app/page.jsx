@@ -25,6 +25,9 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
 const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mod.Common), { ssr: false })
 export default function Page() {
   const [width, setWidth] = useState(700)
+  const scalingFactor = Math.max(width / 400, 2.55)
+
+  console.log('scale', scalingFactor, width)
   useEffect(() => {
     setWidth(window.innerWidth)
   }, [])
@@ -32,7 +35,7 @@ export default function Page() {
     <>
       <div className='mx-auto flex w-full flex-col flex-wrap items-center'>
         {/* jumbo */}
-        <div className='mb-24 flex w-full flex-col items-start justify-center p-12 text-center'>
+        <div className='mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
           <h1 className='w-full  text-5xl font-bold leading-tight'>Interact with the Radio</h1>
           <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p>
         </div>
@@ -43,15 +46,18 @@ export default function Page() {
               <Tape
                 route='/blob'
                 // desktop 1 and mobile 2
-                scale={width > 650 ? 3.4 : 1.55}
-                position={width > 650 ? [0, 0, 0] : [0, 2, 1]}
+                // scale={width > 650 ? 3.4 : 1.55}
+                // position={width > 650 ? [0, 0, 0] : [0, 2, 1]}
+                scale={scalingFactor}
+                position={[0, 0, 0]}
+                responsive={width}
               />
               <Common />
             </Suspense>
           </View>
         </div>
       </div>
-      <div className='absolute bottom-6 flex w-full flex-col items-start justify-center text-center'>
+      <div className='mb-8 flex w-full flex-col items-start justify-center text-center'>
         <h1 className='w-full  text-4xl font-bold leading-tight'>Know More</h1>
         <p className='w-full text-2xl leading-normal'>
           Visit us @{' '}
