@@ -25,9 +25,9 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
 const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mod.Common), { ssr: false })
 export default function Page() {
   const [width, setWidth] = useState(700)
-  const scalingFactor = Math.max(width / 400, 2.55)
+  const scalingFactor = Math.max(width / 50, 18)
 
-  console.log('scale', scalingFactor, width)
+  // console.log('scale', scalingFactor, width)
   useEffect(() => {
     setWidth(window.innerWidth)
   }, [])
