@@ -107,7 +107,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.tape.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
         />
@@ -131,12 +131,16 @@ export function Tape(props) {
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
         />
+        <group name='Vortex' scale={18.408} />
+        <group name='Force' position={[0, 4.904, 1.007]} scale={5.518} />
+        <group name='Camera002_AF_Tracker' position={[-1.386, 1.424, -0.126]} />
+        <group name='Camera001_AF_Tracker' position={[0.032, 1.378, 6.602]} />
         <mesh
           name='ff'
           castShadow
           receiveShadow
           geometry={nodes.ff.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[-0.023, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
@@ -146,7 +150,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.forward.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[-0.041, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
@@ -156,7 +160,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.pause.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[0.012, 0.038, 0.058]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
@@ -166,7 +170,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.record.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[-0.005, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
@@ -176,7 +180,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.rewind.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[-0.076, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
@@ -186,7 +190,7 @@ export function Tape(props) {
           castShadow
           receiveShadow
           geometry={nodes.stop.geometry}
-          material={materials.standardSurface2}
+          material={materials['standardSurface2.001']}
           position={[-0.058, 0.037, 0.058]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
