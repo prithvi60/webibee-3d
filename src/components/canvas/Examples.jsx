@@ -57,7 +57,7 @@ export const Logo = ({ route = '/blob', ...props }) => {
 
 export function Tape(props) {
   const group = useRef()
-  const { nodes, materials, animations } = useGLTF('/TAPE.glb')
+  const { nodes, materials, animations } = useGLTF('/Radio.glb')
   const { actions } = useAnimations(animations, group)
 
   // const scalingFactor = Math.min(Math.max(props.responsive / 1300, 0.5), 1.2)
@@ -135,6 +135,26 @@ export function Tape(props) {
         <group name='Force' position={[0, 4.904, 1.007]} scale={5.518} />
         <group name='Camera002_AF_Tracker' position={[-1.386, 1.424, -0.126]} />
         <group name='Camera001_AF_Tracker' position={[0.032, 1.378, 6.602]} />
+        <mesh
+          name='pCube1'
+          castShadow
+          receiveShadow
+          geometry={nodes.pCube1.geometry}
+          material={materials.standardSurface1}
+          position={[0.037, 0.02, 0.076]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.01}
+        />
+        <mesh
+          name='pCube2'
+          castShadow
+          receiveShadow
+          geometry={nodes.pCube2.geometry}
+          material={materials.standardSurface1}
+          position={[0.07, 0.02, 0.076]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.01}
+        />
         <mesh
           name='ff'
           castShadow
