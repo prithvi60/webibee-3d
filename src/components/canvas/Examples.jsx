@@ -6,89 +6,68 @@ import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
 import { useRouter } from 'next/navigation'
-
-export const Blob = ({ route = '/', ...props }) => {
-  const router = useRouter()
-  const [hovered, hover] = useState(false)
-  useCursor(hovered)
-  return (
-    <mesh
-      onClick={() => router.push(route)}
-      onPointerOver={() => hover(true)}
-      onPointerOut={() => hover(false)}
-      {...props}
-    >
-      <sphereGeometry args={[1, 64, 64]} />
-      <MeshDistortMaterial roughness={0.5} color={hovered ? 'hotpink' : '#1fb2f5'} />
-    </mesh>
-  )
-}
-
-export const Logo = ({ route = '/blob', ...props }) => {
-  const mesh = useRef(null)
-  const router = useRouter()
-
-  const [hovered, hover] = useState(false)
-  const points = useMemo(() => new THREE.EllipseCurve(0, 0, 3, 1.15, 0, 2 * Math.PI, false, 0).getPoints(100), [])
-
-  useCursor(hovered)
-  useFrame((state, delta) => {
-    const t = state.clock.getElapsedTime()
-    mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8)
-    mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
-    mesh.current.rotation.z -= delta / 4
-  })
-
-  return (
-    <group ref={mesh} {...props}>
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, 1]} />
-      {/* @ts-ignore */}
-      <Line worldUnits points={points} color='#1fb2f5' lineWidth={0.15} rotation={[0, 0, -1]} />
-      <mesh onClick={() => router.push(route)} onPointerOver={() => hover(true)} onPointerOut={() => hover(false)}>
-        <sphereGeometry args={[0.55, 64, 64]} />
-        <meshPhysicalMaterial roughness={0.5} color={hovered ? 'hotpink' : '#1fb2f5'} />
-      </mesh>
-    </group>
-  )
-}
+import useSound from 'use-sound'
+// Glossary
+// "pCube1Action" Needle 1
+// "pCube2Action" Needle 2
+//  "tape_2:polySurface670.004Action" fwd button
+// "EmptyAction" close the lid
+//  'cass1:CassetteTape_Main_low_01_2Action' lower the tape
+// "cass1:CassetteTape_Main_low_01_2.002Action" 2nd disk rotate
+// "cass1:CassetteTape_Main_low_01_2.001Action" 1st disk rotate
+const intialAni = [
+  'cass1:CassetteTape_Main_low_01_2Action',
+  'EmptyAction',
+  'ffAction.001',
+  'tape_2:polySurface670.004Action',
+  'pauseAction',
+  'recordAction',
+  'rewindAction',
+  'stopAction',
+]
 
 export function Tape(props) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/Radio.glb')
   const { actions } = useAnimations(animations, group)
-
-  // const scalingFactor = Math.min(Math.max(props.responsive / 1300, 0.5), 1.2)
-  // console.log(scalingFactor)
-
-  // useEffect(() => {
-  //   if (actions) {
-  //     actions['your_animation_name'].play(); // Replace 'your_animation_name' with the actual name of your animation
-  //   }
-  // }, [actions]);
+  const [playActive] = useSound('/sfx/btn.mp3')
 
   useEffect(() => {
     // console.log(actions); // Log the actions object to find animation names
     if (actions) {
       const animationNames = Object.keys(actions)
-      console.log('Animations List', animationNames) // Log the actions object to find animation names
+      // console.log('Animations List', animationNames) // Log the actions object to find animation names
 
       if (animationNames.length > 0) {
-        // actions[animationNames[0]].play() // Play the first available animation
-
         animationNames.forEach((animationName) => {
           const action = actions[animationName]
-
-          action.setLoop(THREE.LoopOnce) // Set the animation to play once
-          action.clampWhenFinished = true // Stop the animation at the last frame
-          // action[animationName].play() // Play each available animation
+          if (intialAni.includes(animationName)) {
+            action.setLoop(THREE.LoopOnce) // Set the animation to play once
+            action.clampWhenFinished = true // Stop the animation at the last frame
+          } else if (
+            animationName === 'cass1:CassetteTape_Main_low_01_2.001Action' ||
+            animationName === 'cass1:CassetteTape_Main_low_01_2.002Action'
+          ) {
+            console.log('ani', action)
+            // action.reset()
+            action.time = 5 // Set the start time to 1 second
+            action.setLoop(THREE.LoopRepeat, Infinity)
+          }
           action.play()
         })
       }
     }
   }, [actions])
+
+  const ButtonAction = (name, time) => {
+    console.log('t', actions[name])
+    const action = actions[name]
+    action.reset()
+    action.setLoop(THREE.LoopOnce)
+    action.time = time // Set the start time to 6 seconds
+    action.fadeIn(0.2).play()
+    playActive()
+  }
   return (
     <group ref={group} {...props} dispose={null}>
       <group name='Scene'>
@@ -164,6 +143,7 @@ export function Tape(props) {
           position={[-0.023, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('ffAction.001', 7.1)}
         />
         <mesh
           name='forward'
@@ -174,6 +154,7 @@ export function Tape(props) {
           position={[-0.041, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('tape_2:polySurface670.004Action', 1.75)}
         />
         <mesh
           name='pause'
@@ -184,6 +165,7 @@ export function Tape(props) {
           position={[0.012, 0.038, 0.058]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('pauseAction', 9)}
         />
         <mesh
           name='record'
@@ -194,6 +176,7 @@ export function Tape(props) {
           position={[-0.005, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('recordAction', 8.2)}
         />
         <mesh
           name='rewind'
@@ -204,6 +187,7 @@ export function Tape(props) {
           position={[-0.076, 0.037, 0.057]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('rewindAction', 6.25)}
         />
         <mesh
           name='stop'
@@ -214,6 +198,7 @@ export function Tape(props) {
           position={[-0.058, 0.037, 0.058]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
+          onClick={() => ButtonAction('stopAction', 5.1)}
         />
         <group name='cap' position={[-0.037, 0.043, -0.044]} scale={1.491}>
           <mesh
