@@ -4,7 +4,9 @@ import CoolButton from '@/components/CoolButton'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Suspense, useEffect, useState } from 'react'
+import { useGLTF } from '@react-three/drei'
 
+useGLTF.preload('/Radio.glb')
 const Tape = dynamic(() => import('@/components/canvas/Radio').then((mod) => mod.Tape), { ssr: false })
 const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
   ssr: false,
@@ -18,7 +20,7 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
           d='M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
         />
       </svg>
-      <p className='mt-6 text-3xl'>Rolling...</p>
+      <p className='mt-6 text-3xl'>Rolling 3 2 1...</p>
     </div>
   ),
 })
