@@ -1,11 +1,11 @@
 'use client'
 
 import { useGLTF, useAnimations } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+// import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
-import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
-import { useRouter } from 'next/navigation'
+// import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
+// import { useRouter } from 'next/navigation'
 import useSound from 'use-sound'
 // Glossary
 // "pCube1Action" Needle 1
@@ -31,6 +31,7 @@ export function Tape(props) {
   const { nodes, materials, animations } = useGLTF('/Radio.glb')
   const { actions } = useAnimations(animations, group)
   const [playActive] = useSound('/sfx/btn.mp3')
+  const [playRoll] = useSound('/sfx/start.mp3')
 
   useEffect(() => {
     // console.log(actions); // Log the actions object to find animation names
@@ -48,7 +49,7 @@ export function Tape(props) {
             animationName === 'cass1:CassetteTape_Main_low_01_2.001Action' ||
             animationName === 'cass1:CassetteTape_Main_low_01_2.002Action'
           ) {
-            console.log('ani', action)
+            // console.log('ani', action)
             // action.reset()
             action.time = 5 // Set the start time to 1 second
             action.setLoop(THREE.LoopRepeat, Infinity)
@@ -58,9 +59,14 @@ export function Tape(props) {
       }
     }
   }, [actions])
+  useEffect(() => {
+    setTimeout(() => {
+      playRoll()
+    }, 50)
+  }, [playRoll])
 
   const ButtonAction = (name, time) => {
-    console.log('t', actions[name])
+    // console.log('t', actions[name])
     const action = actions[name]
     action.reset()
     action.setLoop(THREE.LoopOnce)

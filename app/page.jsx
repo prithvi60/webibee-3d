@@ -1,11 +1,11 @@
 'use client'
 
+import CoolButton from '@/components/CoolButton'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Suspense, useEffect, useState } from 'react'
 
-// const Logo = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Logo), { ssr: false })
-const Tape = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Tape), { ssr: false })
+const Tape = dynamic(() => import('@/components/canvas/Radio').then((mod) => mod.Tape), { ssr: false })
 const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
   ssr: false,
   loading: () => (
@@ -25,6 +25,7 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
 const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mod.Common), { ssr: false })
 export default function Page() {
   const [width, setWidth] = useState(700)
+  const [start, setStart] = useState(false)
   const scalingFactor = Math.max(width / 50, 18)
 
   // console.log('scale', scalingFactor, width)
@@ -37,12 +38,13 @@ export default function Page() {
         {/* jumbo */}
         <div className='mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
           <h1 className='w-full  text-5xl font-bold leading-tight'>Interact with the Radio</h1>
-          <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p>
+          {/* <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p> */}
         </div>
 
-        <div className='w-full text-center'>
-          <View className='flex h-96 w-full flex-col items-center justify-center'>
-            <Suspense fallback={null}>
+        {start ? (
+          <div className='w-full text-center'>
+            <View className='flex h-96 w-full flex-col items-center justify-center'>
+              {/* <Suspense fallback={null}> */}
               <Tape
                 route='/blob'
                 // desktop 1 and mobile 2
@@ -53,9 +55,15 @@ export default function Page() {
                 responsive={width}
               />
               <Common />
-            </Suspense>
-          </View>
-        </div>
+              {/* </Suspense> */}
+            </View>
+          </div>
+        ) : (
+          <div className=' h-96'>
+            {' '}
+            <CoolButton setStart={setStart} />
+          </div>
+        )}
       </div>
       <div className='mb-8 flex w-full flex-col items-start justify-center text-center'>
         <h1 className='w-full  text-4xl font-bold leading-tight'>Know More</h1>
