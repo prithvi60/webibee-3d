@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 
-const Blob = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Blob), { ssr: false })
+const Blob = dynamic(() => import('@/components/canvas/Radio').then((mod) => mod.Blob), { ssr: false })
 const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
   ssr: false,
   loading: () => (
