@@ -28,7 +28,7 @@ const intialAni = [
 
 export function Tape(props) {
   const group = useRef()
-  const { nodes, materials, animations } = useGLTF('/Radio.glb')
+  const { nodes, materials, animations } = useGLTF('/Radiofin.glb')
   const { actions } = useAnimations(animations, group)
   const [playActive] = useSound('/sfx/btn.mp3')
   const [playRoll] = useSound('/sfx/start.mp3')
@@ -50,8 +50,8 @@ export function Tape(props) {
             animationName === 'cass1:CassetteTape_Main_low_01_2.002Action'
           ) {
             // console.log('ani', action)
-            // action.reset()
-            action.time = 5 // Set the start time to 1 second
+            action.reset()
+            action.time = 1 // Set the start time to 1 second
             action.setLoop(THREE.LoopRepeat, Infinity)
           }
           action.play()
@@ -83,7 +83,7 @@ export function Tape(props) {
           receiveShadow
           geometry={nodes.Cassette.geometry}
           material={materials['cass1:CassetteTape_01a2']}
-          position={[-0.025, 0.056, 0.01]}
+          position={[-0.025, 0.037, 0.01]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
         />
@@ -102,7 +102,7 @@ export function Tape(props) {
           receiveShadow
           geometry={nodes.right_roll.geometry}
           material={materials['cass1:CassetteTape_01a2']}
-          position={[-0.005, 0.056, -0.003]}
+          position={[-0.005, 0.037, -0.003]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
         />
@@ -112,7 +112,7 @@ export function Tape(props) {
           receiveShadow
           geometry={nodes.left_roll.geometry}
           material={materials['cass1:CassetteTape_01a2']}
-          position={[-0.045, 0.056, -0.003]}
+          position={[-0.045, 0.037, -0.003]}
           rotation={[Math.PI / 2, 0, 0]}
           scale={0.01}
         />
