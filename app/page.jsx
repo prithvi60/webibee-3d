@@ -17,10 +17,42 @@ const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.
 const Common = dynamic(() => import('@/components/canvas/View').then((mod) => mod.Common), { ssr: false })
 export default function Page() {
   const [width, setWidth] = useState(700)
-  const [start, setStart] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const scalingFactor = Math.max(width / 40, 18)
+  const calculateScalingFactor = (width) => {
+    if (width < 480) {
+      // Mobile
+      return Math.max(width / 38, 22)
+    } else if (width < 768) {
+      // Tablet
+      return Math.max(width / 36, 14)
+    } else {
+      // Desktop
+      return Math.max(width / 32, 18)
+    }
+  }
+  const calculatePosition = (width) => {
+    if (width < 480) {
+      // Mobile
+      return [0, 0, -1.5]
+    } else {
+      // Tablet and Desktop
+      return [0, 0.2, -1.5]
+    }
+  }
+
+  const calculateRotation = (width) => {
+    if (width < 1024) {
+      // Mobile - slight rotation
+      return [Math.PI / 2 - 1, Math.PI / 2 - 0.2, Math.PI / 6]
+    } else {
+      // Tablet and Desktop - vertical with slight tilt
+      return [Math.PI / 2 - 0.2, 0, 0]
+    }
+  }
+  const scalingFactor = calculateScalingFactor(width)
+  const position = calculatePosition(width)
+  const rotation = calculateRotation(width)
 
   // console.log('scale', scalingFactor, width)
   useEffect(() => {
@@ -29,45 +61,42 @@ export default function Page() {
 
   return (
     <>
-      <div className='mx-auto flex w-full flex-col flex-wrap items-center'>
-        {/* jumbo */}
-        <div className='absolute top-0  mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
-          <h1 className='w-full  text-5xl font-bold leading-tight'>Interact with the Radio</h1>
-          {/* <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p> */}
+      {loading && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black'>
+          <div className='animate-bounce text-2xl text-white'>Webibee...</div>
         </div>
-        {start && loading && (
-          <div className=' absolute top-1/3 flex  items-center justify-center '>
-            <Image width={350} height={350} src={'/img/loading.webp'} alt='loading' loading={'eager'} preload />
+      )}
+      <div className='select-none '>
+        <div className='mx-auto flex w-full flex-col flex-wrap items-center'>
+          {/* jumbo */}
+          <div className='absolute top-0  mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
+            <h1 className='z-10  w-full text-5xl font-bold leading-tight'>Interact with the Radio</h1>
+            {/* <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p> */}
           </div>
-        )}
-        {start ? (
           <div className='w-full text-center'>
             <View className='flex h-screen w-full flex-col items-center justify-center'>
               <Tape
-                route='/blob'
                 scale={scalingFactor}
-                position={[0, -1.75, -1.5]}
+                rotation={rotation}
+                position={position}
                 responsive={width}
-                onUpdate={() => setLoading(false)}
+                onUpdate={() => {
+                  setLoading(false)
+                }}
               />
               <Common />
             </View>
           </div>
-        ) : (
-          <div className='flex h-screen items-center'>
-            {' '}
-            <CoolButton setStart={setStart} />
-          </div>
-        )}
-      </div>
-      <div className='absolute bottom-0 mb-8 flex w-full flex-col items-start justify-center text-center'>
-        <h1 className='w-full  text-4xl font-bold leading-tight'>Know More</h1>
-        <p className='w-full text-2xl leading-normal'>
-          Visit us @{' '}
-          <Link target='blank' href='https://webibee.com/' className='text-blue-200'>
-            webibee.com
-          </Link>
-        </p>
+        </div>
+        <div className='absolute bottom-0 z-10 mb-8 flex w-full flex-col items-start justify-center text-center'>
+          <h1 className='w-full  text-4xl font-bold leading-tight'>Know More</h1>
+          <p className='w-full text-2xl leading-normal'>
+            Visit us @{' '}
+            <Link target='blank' href='https://webibee.com/' className='text-blue-200'>
+              webibee.com
+            </Link>
+          </p>
+        </div>
       </div>
     </>
   )

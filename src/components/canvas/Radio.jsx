@@ -34,30 +34,22 @@ export function Tape(props) {
   const [playRoll] = useSound('/sfx/start.mp3')
 
   useEffect(() => {
-    // console.log(actions); // Log the actions object to find animation names
-    if (actions) {
-      const animationNames = Object.keys(actions)
-      // console.log('Animations List', animationNames) // Log the actions object to find animation names
+    if (!actions) return
 
-      if (animationNames.length > 0) {
-        animationNames.forEach((animationName) => {
-          const action = actions[animationName]
-          if (intialAni.includes(animationName)) {
-            action.setLoop(THREE.LoopOnce) // Set the animation to play once
-            action.clampWhenFinished = true // Stop the animation at the last frame
-          } else if (
-            animationName === 'cass1:CassetteTape_Main_low_01_2.001Action' ||
-            animationName === 'cass1:CassetteTape_Main_low_01_2.002Action'
-          ) {
-            // console.log('ani', action)
-            action.reset()
-            action.time = 1 // Set the start time to 1 second
-            action.setLoop(THREE.LoopRepeat, Infinity)
-          }
-          action.play()
-        })
+    Object.entries(actions).forEach(([animationName, action]) => {
+      if (intialAni.includes(animationName)) {
+        action.setLoop(THREE.LoopOnce)
+        action.clampWhenFinished = true
+      } else if (
+        animationName === 'cass1:CassetteTape_Main_low_01_2.001Action' ||
+        animationName === 'cass1:CassetteTape_Main_low_01_2.002Action'
+      ) {
+        action.reset()
+        action.time = 1
+        action.setLoop(THREE.LoopRepeat, Infinity)
       }
-    }
+      action.play()
+    })
   }, [actions])
   useEffect(() => {
     setTimeout(() => {
