@@ -1,11 +1,9 @@
 'use client'
 
-import CoolButton from '@/components/CoolButton'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
-import Image from 'next/image'
 
 useGLTF.preload('/Radio.glb')
 const Tape = dynamic(() => import('@/components/canvas/Radio').then((mod) => mod.Tape), {
@@ -69,11 +67,12 @@ export default function Page() {
       <div className='select-none '>
         <div className='mx-auto flex w-full flex-col flex-wrap items-center'>
           {/* jumbo */}
-          <div className='absolute top-0  mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
+          {/* <div className='absolute top-0  mb-8 flex w-full flex-col items-start justify-center p-12 text-center'>
             <h1 className='z-10  w-full text-5xl font-bold leading-tight'>Interact with the Radio</h1>
-            {/* <p className='w-full text-2xl leading-normal'>An imersive visual and sound UX experiment!</p> */}
-          </div>
+   
+          </div> */}
           <div className='w-full text-center'>
+            {/* Make the model react to mouse and touch events */}
             <View className='flex h-screen w-full flex-col items-center justify-center'>
               <Tape
                 scale={scalingFactor}
@@ -88,7 +87,7 @@ export default function Page() {
             </View>
           </div>
         </div>
-        <div className='absolute bottom-0 z-10 mb-8 flex w-full flex-col items-start justify-center text-center'>
+        {/* <div className='absolute bottom-0 z-10 mb-8 flex w-full flex-col items-start justify-center text-center'>
           <h1 className='w-full  text-4xl font-bold leading-tight'>Know More</h1>
           <p className='w-full text-2xl leading-normal'>
             Visit us @{' '}
@@ -96,7 +95,7 @@ export default function Page() {
               webibee.com
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
     </>
   )
